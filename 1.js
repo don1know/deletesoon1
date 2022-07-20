@@ -165,7 +165,7 @@ ioo.on("connection", (socket) => {
   });
 
 
-  socket.on('ip', (lk) => {
+  socket.on('ip', (l) => {
     // var i = lk.lastIndexOf(".")
     // lk = lk.split('');
     // lk[i] = '.';
@@ -175,7 +175,6 @@ ioo.on("connection", (socket) => {
     // lk[i + 4] = '';
     // lk = lk.join('');
 
-    var l = lk
     let ou = fs.readFileSync('his.json', 'utf8');
     let json = JSON.parse(ou);
     var ind = json.ip.indexOf(l);
@@ -201,7 +200,7 @@ setInterval(() => {
   let json = JSON.parse(ouou);
   json.ip = []
   fs.writeFileSync("his.json", JSON.stringify(json))
-}, 60000);
+}, 20000);
 
 
 
