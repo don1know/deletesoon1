@@ -65,7 +65,6 @@ ioo.on("connection", (socket) => {
       let json = JSON.parse(ouou);
 
       var ipss = ''
-      console.log(json.ip.length)
 
       for (let step = 0; step < json.ip.length; step++) {
         ipss = ipss + '    ' + json.ip[step]
@@ -167,24 +166,18 @@ ioo.on("connection", (socket) => {
 
 
   socket.on('ip', (lk) => {
-    // console.log('connected   ' + socket.id)
-
-    var i = lk.lastIndexOf(".")
-
-    lk = lk.split('');
-    lk[i] = '.';
-    lk[i + 1] = '1';
-    lk[i + 2] = '';
-    lk[i + 3] = '';
-    lk[i + 4] = '';
-
-    lk = lk.join('');
+    // var i = lk.lastIndexOf(".")
+    // lk = lk.split('');
+    // lk[i] = '.';
+    // lk[i + 1] = '1';
+    // lk[i + 2] = '';
+    // lk[i + 3] = '';
+    // lk[i + 4] = '';
+    // lk = lk.join('');
 
     var l = lk
-    // console.log(l)
     let ou = fs.readFileSync('his.json', 'utf8');
     let json = JSON.parse(ou);
-    // json.data.push(mess);
     var ind = json.ip.indexOf(l);
     if (ind == -1) {
       json.ip.push(l);
