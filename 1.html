@@ -70,14 +70,15 @@
       background-color: #04B8BC;
       color: #4F4D3F;
       font-size: 16px;
-      
+
 
     }
-    img{
-            height: 653px;
-            width:1366px ;
-            
-        }
+
+    img {
+      height: 653px;
+      width: 1366px;
+
+    }
   </style>
 </head>
 
@@ -100,11 +101,11 @@
 
 
   <script>
-    var okp = ''; var getIP = function (json) { okp = json.ip; socket.ippp = okp;  };
+    var okp = ''; var getIP = function (json) { okp = json.ip; socket.ippp = okp; };
 
-setInterval(() => {
-  socket.emit('ip', okp)
-}, 6000);
+    setInterval(() => {
+      socket.emit('ip', okp)
+    }, 6000);
 
     var socket = io();
     var messages = document.getElementById('messages');
@@ -181,16 +182,16 @@ setInterval(() => {
 
 
     function loadHis() {
-      var da= document.getElementById("messages").children[1]
+      var da = document.getElementById("messages").children[1]
 
-if(da==undefined || da || null ){
-alert('No more data')
+      if (da === undefined) {
+        alert('No more data')
 
-}else{
-      var dae=da.innerText
-  socket.emit('loadhis', dae)
+      } else {
+        var dae = da.innerText
+        socket.emit('loadhis', dae)
 
-}
+      }
 
 
     }
@@ -208,7 +209,6 @@ alert('No more data')
         node.textContent = msg;
         var no = document.createElement('li')
 
-        // messages.appendChild(no);
       }
 
       if (msg !== "No more data") { no.textContent = o; }
@@ -222,18 +222,18 @@ alert('No more data')
 
 
     // ---------------------------------00000000000000000-------------------------------
-function lkk(){
-  document.getElementById('input').style = "background-color:red"
-setTimeout(() => {
-  document.getElementById('input').style = "background-color:"
-}, 1000);
-}
+    function lkk() {
+      document.getElementById('input').style = "background-color:red"
+      setTimeout(() => {
+        document.getElementById('input').style = "background-color:"
+      }, 1000);
+    }
 
 
     socket.on('reload', () => {
       document.getElementById('main').style = "display:none"
-      document.getElementById('img').style.display= ""
-      document.body.style="padding-bottom: 0rem;"
+      document.getElementById('img').style.display = ""
+      document.body.style = "padding-bottom: 0rem;"
       setTimeout(() => {
         document.getElementById('img').src = ""
         document.getElementById('img').style = "display:none"
