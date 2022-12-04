@@ -14,200 +14,198 @@ const app = express(); const httpServer = createServer(app); const ioo = new Ser
 
 
 
-ioo.on("connection", (socket) => {
+// ioo.on("connection", (socket) => {
 
 
 
 
 
-  function posiSoil() {
-    var myInterval = setInterval(() => {
-      socket.broadcast.emit('sttusBroadcast')
-      socket.emit('statusSender')
-    }, 1500);
+//   function posiSoil() {
+//     var myInterval = setInterval(() => {
+//       socket.broadcast.emit('sttusBroadcast')
+//       socket.emit('statusSender')
+//     }, 1500);
 
-    setTimeout(() => {
-      clearInterval(myInterval);
-    }, 10500);
-  }
+//     setTimeout(() => {
+//       clearInterval(myInterval);
+//     }, 10500);
+//   }
 
-  socket.on('joined', (o) => {
-    var ou = fs.readFileSync('his.json', 'utf8');
-    var json = JSON.parse(ou);
+//   socket.on('joined', (o) => {
+//     var ou = fs.readFileSync('his.json', 'utf8');
+//     var json = JSON.parse(ou);
 
-    var d1 = json.data[json.data.length - 1];
-    var t1 = json.date[json.date.length - 1];
-    // console.log(o) 
-    if (d1 === undefined) { } else { socket.emit('wel', d1, t1, 'not') }
+//     var d1 = json.data[json.data.length - 1];
+//     var t1 = json.date[json.date.length - 1];
+//     // console.log(o) 
+//     if (d1 === undefined) { } else { socket.emit('wel', d1, t1, 'not') }
 
-  })
-
-
-
-
-  socket.on('sent', (mess) => {
-    var d = moment().tz('Asia/dhaka').format('D/M/YY,h:m:s a')
-
-    if (mess === "D0000000000") {
-      var ou = fs.readFile('his.json', function (err, dat) {
-        var json = JSON.parse(dat);
-        json.data = [];
-        json.date = [];
-        json.num = ["0-"];
-        fs.writeFileSync("his.json", JSON.stringify(json))
-        socket.emit('reload')
-        socket.broadcast.emit('reload')
-      })
-    } else if (mess === "eror" || mess === "Eror" || mess === "ERor" || mess === "EROr" || mess === "EROR") {
-      socket.broadcast.emit('not')
-    } else if (mess == 'ip') {
-      var ouou = fs.readFileSync('his.json', 'utf8');
-      let json = JSON.parse(ouou);
-
-      var ipss = ''
-
-      for (let step = 0; step < json.ip.length; step++) {
-        ipss = ipss + '    ' + json.ip[step]
-      }
-
-      socket.emit('showip', json.ip.length, ipss)
+//   })
 
 
 
 
+//   socket.on('sent', (mess) => {
+//     var d = moment().tz('Asia/dhaka').format('D/M/YY,h:m:s a')
 
+//     if (mess === "D0000000000") {
+//       var ou = fs.readFile('his.json', function (err, dat) {
+//         var json = JSON.parse(dat);
+//         json.data = [];
+//         json.date = [];
+//         json.num = ["0-"];
+//         fs.writeFileSync("his.json", JSON.stringify(json))
+//         socket.emit('reload')
+//         socket.broadcast.emit('reload')
+//       })
+//     } else if (mess === "eror" || mess === "Eror" || mess === "ERor" || mess === "EROr" || mess === "EROR") {
+//       socket.broadcast.emit('not')
+//     } else if (mess == 'ip') {
+//       var ouou = fs.readFileSync('his.json', 'utf8');
+//       let json = JSON.parse(ouou);
 
-    } else {
-      fs.readFile('his.json', function (err, dat) {
-        var json = JSON.parse(dat);
-        json.data.push(mess);
-        json.date.push(d);
+//       var ipss = ''
 
-        var l = json.num.length
-        var nnp = l + '-'
-        json.num.push(nnp);
+//       for (let step = 0; step < json.ip.length; step++) {
+//         ipss = ipss + '    ' + json.ip[step]
+//       }
 
-        fs.writeFileSync("his.json", JSON.stringify(json))
-        posiSoil()
-      })
-    }
-  })
-
-
-  socket.on('deji', (date) => {
-    let ou = fs.readFileSync('his.json', 'utf8');
-    let json = JSON.parse(ou);
-    let e = json.date.indexOf(date)
-    let dd = json.date[e + 1];
-    let ddd = json.data[e + 1];
-
-    if (dd !== undefined) {
-      socket.emit('newMsg', ddd, dd, 'not')
-    }
-
-  })
-
-  socket.on('dejiSender', (date) => {
-    let ou = fs.readFileSync('his.json', 'utf8');
-    let json = JSON.parse(ou);
-    let e = json.date.indexOf(date)
-    let dd = json.date[e + 1];
-    let ddd = json.data[e + 1];
-
-    if (dd !== undefined) {
-      socket.emit('newMsg', ddd, dd, 'yas')
-    }
-    // fs.readFile('his.json', function (err, dat) {
-    //   var json = JSON.parse(dat);
-    //   let e = json.date.indexOf(date)
-    //   let dd = json.date[e + 1];
-    //   let ddd = json.data[e + 1];
-    //   if (dd !== undefined || dd !== null) {
-    //     socket.emit('newMsg', ddd, dd, 'yas')
-    //   }
-    // })
-
-
-  })
-
-
-  socket.on('deji0', () => {
-    let ou = fs.readFileSync('his.json', 'utf8');
-    let json = JSON.parse(ou);
-    let d = json.data[0];
-    let de = json.date[0];
-
-    socket.emit('newMsg', d, de, 'not')
-  })
-
-
-  socket.on('deji0s', () => {
-    let ou = fs.readFileSync('his.json', 'utf8');
-    let json = JSON.parse(ou);
-    let d = json.data[0];
-    let de = json.date[0];
-
-    socket.emit('newMsg', d, de, 'yas')
-
-
-  })
-
-
-  socket.on("loadhis", (ee) => {
-    var ou = fs.readFileSync('his.json', 'utf8');
-    var json = JSON.parse(ou);
-    var e = json.date.lastIndexOf(ee)
-    var dd = json.data[e - 1];
-    var ttt = json.date[e - 1]
-
-    if (e <= 0) { if (e == 0) { socket.emit("his", "No more data") } if (e < 0) { } }
-    else { socket.emit("his", dd, ttt) }
-  });
-
-
-  socket.on('ip', (l) => {
-    // var i = lk.lastIndexOf(".")
-    // lk = lk.split('');
-    // lk[i] = '.';
-    // lk[i + 1] = '1';
-    // lk[i + 2] = '';
-    // lk[i + 3] = '';
-    // lk[i + 4] = '';
-    // lk = lk.join('');
-
-    let ou = fs.readFileSync('his.json', 'utf8');
-    let json = JSON.parse(ou);
-    var ind = json.ip.indexOf(l);
-    if (ind == -1) {
-      json.ip.push(l);
-    } else {
-    }
-
-    fs.writeFileSync("his.json", JSON.stringify(json))
-
-  })
+//       socket.emit('showip', json.ip.length, ipss)
 
 
 
 
 
 
+//     } else {
+//       fs.readFile('his.json', function (err, dat) {
+//         var json = JSON.parse(dat);
+//         json.data.push(mess);
+//         json.date.push(d);
 
-});
+//         var l = json.num.length
+//         var nnp = l + '-'
+//         json.num.push(nnp);
 
-setInterval(() => {
-  var ouou = fs.readFileSync('his.json', 'utf8');
-  let json = JSON.parse(ouou);
-  json.ip = []
-  fs.writeFileSync("his.json", JSON.stringify(json))
-}, 20000);
+//         fs.writeFileSync("his.json", JSON.stringify(json))
+//         // posiSoil()
+//       })
+//       socket.emit('ti',d)
+//     }
+//   })
+
+
+//   socket.on('deji', (date) => {
+//     let ou = fs.readFileSync('his.json', 'utf8');
+//     let json = JSON.parse(ou);
+//     let e = json.date.indexOf(date)
+//     let dd = json.date[e + 1];
+//     let ddd = json.data[e + 1];
+
+//     if (dd !== undefined) {
+//       socket.emit('newMsg', ddd, dd, 'not')
+//     }
+
+//   })
+
+//   socket.on('dejiSender', (date) => {
+//     let ou = fs.readFileSync('his.json', 'utf8');
+//     let json = JSON.parse(ou);
+//     let e = json.date.indexOf(date)
+//     let dd = json.date[e + 1];
+//     let ddd = json.data[e + 1];
+
+//     if (dd !== undefined) {
+//       socket.emit('newMsg', ddd, dd, 'yas')
+//     }
+//     // fs.readFile('his.json', function (err, dat) {
+//     //   var json = JSON.parse(dat);
+//     //   let e = json.date.indexOf(date)
+//     //   let dd = json.date[e + 1];
+//     //   let ddd = json.data[e + 1];
+//     //   if (dd !== undefined || dd !== null) {
+//     //     socket.emit('newMsg', ddd, dd, 'yas')
+//     //   }
+//     // })
+
+
+//   })
+
+
+//   socket.on('deji0', () => {
+//     let ou = fs.readFileSync('his.json', 'utf8');
+//     let json = JSON.parse(ou);
+//     let d = json.data[0];
+//     let de = json.date[0];
+
+//     socket.emit('newMsg', d, de, 'not')
+//   })
+
+
+//   socket.on('deji0s', () => {
+//     let ou = fs.readFileSync('his.json', 'utf8');
+//     let json = JSON.parse(ou);
+//     let d = json.data[0];
+//     let de = json.date[0];
+
+//     socket.emit('newMsg', d, de, 'yas')
+
+
+//   })
+
+
+//   socket.on("loadhis", (ee) => {
+//     var ou = fs.readFileSync('his.json', 'utf8');
+//     var json = JSON.parse(ou);
+//     var e = json.date.lastIndexOf(ee)
+//     var dd = json.data[e - 1];
+//     var ttt = json.date[e - 1]
+
+//     if (e <= 0) { if (e == 0) { socket.emit("his", "No more data") } if (e < 0) { } }
+//     else { socket.emit("his", dd, ttt) }
+//   });
+
+
+//   socket.on('ip', (l) => {
+//     // var i = lk.lastIndexOf(".")
+//     // lk = lk.split('');
+//     // lk[i] = '.';
+//     // lk[i + 1] = '1';
+//     // lk[i + 2] = '';
+//     // lk[i + 3] = '';
+//     // lk[i + 4] = '';
+//     // lk = lk.join('');
+
+//     let ou = fs.readFileSync('his.json', 'utf8');
+//     let json = JSON.parse(ou);
+//     var ind = json.ip.indexOf(l);
+//     if (ind == -1) {
+//       json.ip.push(l);
+//     } else {
+//     }
+
+//     fs.writeFileSync("his.json", JSON.stringify(json))
+
+//   })
+
+
+// });
+
+
+
+// setInterval(() => {
+//   var ouou = fs.readFileSync('his.json', 'utf8');
+//   let json = JSON.parse(ouou);
+//   json.ip = []
+//   fs.writeFileSync("his.json", JSON.stringify(json))
+// }, 20000);
 
 
 
 {
   app.use(bodyParser.json())
   // app.set('etag', false)
-  app.get('/', (req, res) => { res.sendFile(__dirname + '/1.html') })
+  app.get('/', (req, res) => { res.send('/1.html') })
   // app.get('/1css', (req, res) => { res.sendFile(__dirname + '/1.css') })
   app.get('/lite', (req, res) => { res.sendFile(__dirname + '/2.html') })
   // app.get('/ok', (req, res) => { console.log(io); res.send('io') })
@@ -356,5 +354,6 @@ setInterval(() => {
 
 }
 
+app.get('/', (req, res) => { res.send('/1.html') })
 
 
